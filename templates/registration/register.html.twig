@@ -1,20 +1,58 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Inscription - DevDocs{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
 
-    {{ form_errors(registrationForm) }}
+<div class="container mt-5" style="max-width: 500px;">
+
+    <h2 class="text-center mb-4">Créer un compte</h2>
 
     {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.pseudonyme) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
 
-        <button type="submit" class="btn">Register</button>
+        <div class="mb-3">
+            {{ form_label(registrationForm.pseudonyme) }}
+            {{ form_widget(registrationForm.pseudonyme, {
+                attr: {class: 'form-control'}
+            }) }}
+            <div class="text-danger">
+                {{ form_errors(registrationForm.pseudonyme) }}
+            </div>
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(registrationForm.email) }}
+            {{ form_widget(registrationForm.email, {
+                attr: {class: 'form-control'}
+            }) }}
+            <div class="text-danger">
+                {{ form_errors(registrationForm.email) }}
+            </div>
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(registrationForm.plainPassword.first) }}
+            {{ form_widget(registrationForm.plainPassword.first, {
+                attr: {class: 'form-control'}
+            }) }}
+            {{ form_errors(registrationForm.plainPassword.first) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(registrationForm.plainPassword.second) }}
+            {{ form_widget(registrationForm.plainPassword.second, {
+                attr: {class: 'form-control'}
+            }) }}
+            {{ form_errors(registrationForm.plainPassword.second) }}
+            {{ form_errors(registrationForm.plainPassword) }}
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">
+            S'inscrire
+        </button>
+
     {{ form_end(registrationForm) }}
+
+</div>
+
 {% endblock %}

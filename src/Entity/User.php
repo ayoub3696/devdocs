@@ -40,7 +40,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 30)]
     #[Assert\NotBlank(message: 'Le pseudonyme est obligatoire.')]
     #[Assert\Length(
         min: 3,
