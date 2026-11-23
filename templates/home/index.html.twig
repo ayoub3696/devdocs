@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil - DevDocs{% endblock %}
+
+{% block body %}
+    <section class="text-center py-5 bg-white rounded shadow-sm mb-4">
+        <h1 class="display-5 fw-bold">Bienvenue sur DevDocs</h1>
+        <p class="lead text-muted">Des tutoriels pour apprendre le développement pas à pas.</p>
+        <a href="#" class="btn btn-primary btn-lg">Voir les tutoriels</a>
+    </section>
+
+    <h2 class="h4 mb-3">Derniers tutoriels</h2>
+    <div class="row g-4">
+        {% for i in 1..3 %}
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h3 class="h5 card-title">Titre du tutoriel {{ i }}</h3>
+                        <p class="card-text text-muted">Courte description du tutoriel (données fictives).</p>
+                    </div>
+                    <div class="card-footer bg-white border-0">
+                        <a href="#" class="btn btn-outline-primary btn-sm">Lire</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
