@@ -1,30 +1,57 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Comment{% endblock %}
+{% block title %}Détail du commentaire - DevDocs{% endblock %}
 
 {% block body %}
-    <h1>Comment</h1>
+<section class="admin-category-page">
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ comment.id }}</td>
-            </tr>
-            <tr>
-                <th>Content</th>
-                <td>{{ comment.content }}</td>
-            </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ comment.createdAt ? comment.createdAt|date('Y-m-d') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="admin-category-header">
+        <div>
+            <span class="section-badge">COMMUNAUTÉ</span>
+            <h1>Détail du commentaire</h1>
+            <p>Consultez les informations du commentaire.</p>
+        </div>
 
-    <a href="{{ path('app_comment_index') }}">back to list</a>
+        <a href="{{ path('app_comment_index') }}" class="btn btn-light">
+            <i class="bi bi-arrow-left"></i> Retour
+        </a>
+    </div>
 
-    <a href="{{ path('app_comment_edit', {'id': comment.id}) }}">edit</a>
+    <div class="admin-category-card">
 
-    {{ include('comment/_delete_form.html.twig') }}
+        <h2>Commentaire #{{ comment.id }}</h2>
+
+        <div class="tutorial-full-content mt-4">
+            {{ comment.content|nl2br }}
+        </div>
+
+        <hr>
+
+        <p>
+            <strong>Auteur :</strong>
+            {{ comment.auteur.pseudonyme }}
+        </p>
+
+        <p>
+            <strong>Tutoriel :</strong>
+            {{ comment.tutorial.title }}
+        </p>
+
+        <p>
+            <strong>Date :</strong>
+            {{ comment.createdAt|date('d/m/Y') }}
+        </p>
+
+        <div class="tutorial-form-actions mt-4">
+            <a href="{{ path('app_comment_edit', {'id': comment.id}) }}"
+               class="btn btn-primary-custom">
+                <i class="bi bi-pencil"></i> Modifier
+            </a>
+
+            {{ include('comment/_delete_form.html.twig') }}
+        </div>
+
+    </div>
+
+</section>
 {% endblock %}

@@ -1,20 +1,61 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello CategoryController!{% endblock %}
+{% block title %}Catégories - DevDocs{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+<section class="category-page">
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>/home/ayoub/projets/devdocs/src/Controller/CategoryController.php</code></li>
-        <li>Your template at <code>/home/ayoub/projets/devdocs/templates/category/index.html.twig</code></li>
-    </ul>
-</div>
+    <div class="category-page-header">
+        <div>
+            <span class="section-badge">EXPLORATION</span>
+            <h1>Explorez les catégories</h1>
+            <p>Découvrez les différents domaines du développement et trouvez les tutoriels qui vous intéressent.</p>
+        </div>
+    </div>
+
+    <div class="category-page-grid">
+
+        {% if categories is not empty %}
+
+            <div class="row g-4">
+                {% for category in categories %}
+                    <div class="col-md-6 col-lg-4">
+                        <article class="category-page-card">
+
+                            <div class="category-page-icon">
+                                <i class="bi bi-folder2-open"></i>
+                            </div>
+
+                            <h3>{{ category.name }}</h3>
+
+                            <p>
+                                {{ category.description ?: 'Découvrez les tutoriels de cette catégorie.' }}
+                            </p>
+
+                            <a href="{{ path('app_tutorial_index', {'category': category.id}) }}"
+                               class="category-explore-link">
+                                Explorer les tutoriels
+                                <i class="bi bi-arrow-right"></i>
+                            </a>
+
+                        </article>
+                    </div>
+                {% endfor %}
+            </div>
+
+        {% else %}
+
+            <div class="tutorial-empty">
+                <i class="bi bi-folder-x"></i>
+                <h3>Aucune catégorie disponible</h3>
+                <p>Les catégories seront bientôt disponibles.</p>
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
 {% endblock %}

@@ -1,28 +1,186 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Accueil - DevDocs{% endblock %}
+{% block title %}DevDocs - Apprenez le développement{% endblock %}
 
 {% block body %}
-    <section class="text-center py-5 bg-white rounded shadow-sm mb-4">
-        <h1 class="display-5 fw-bold">Bienvenue sur DevDocs</h1>
-        <p class="lead text-muted">Des tutoriels pour apprendre le développement pas à pas.</p>
-        <a href="#" class="btn btn-primary btn-lg">Voir les tutoriels</a>
-    </section>
 
-    <h2 class="h4 mb-3">Derniers tutoriels</h2>
-    <div class="row g-4">
-        {% for i in 1..3 %}
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body">
-                        <h3 class="h5 card-title">Titre du tutoriel {{ i }}</h3>
-                        <p class="card-text text-muted">Courte description du tutoriel (données fictives).</p>
-                    </div>
-                    <div class="card-footer bg-white border-0">
-                        <a href="#" class="btn btn-outline-primary btn-sm">Lire</a>
-                    </div>
+    {# Hero section #}
+    <section class="hero-section">
+        <div class="hero-content">
+            <span class="hero-badge">
+                <i class="bi bi-stars"></i> Votre espace d'apprentissage
+            </span>
+
+            <h1>
+                Apprenez à coder.<br>
+                <span>Construisez votre avenir.</span>
+            </h1>
+
+            <p>
+                Découvrez des tutoriels pratiques, développez vos compétences
+                et progressez dans le monde du développement informatique.
+            </p>
+
+            <div class="hero-buttons">
+                <a href="{{ path('app_tutorial_index') }}" class="btn btn-primary-custom btn-lg">
+                    Explorer les tutoriels
+                    <i class="bi bi-arrow-right"></i>
+                </a>
+
+                {% if not app.user %}
+                    <a href="{{ path('app_register') }}" class="btn btn-outline-dark btn-lg">
+                        Rejoindre DevDocs
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="hero-decoration">
+            <div class="code-card">
+                <div class="code-header">
+                    <span></span><span></span><span></span>
+                </div>
+                <div class="code-content">
+                    <p><span class="code-purple">const</span> learning = {</p>
+                    <p class="code-indent">skills: <span class="code-green">'development'</span>,</p>
+                    <p class="code-indent">level: <span class="code-green">'growing'</span>,</p>
+                    <p class="code-indent">success: <span class="code-purple">true</span></p>
+                    <p>};</p>
+                    <p class="code-comment">// Start learning today!</p>
                 </div>
             </div>
-        {% endfor %}
-    </div>
+        </div>
+    </section>
+
+    {# Categories section #}
+    <section class="home-section">
+
+        <div class="section-heading">
+            <div>
+                <span class="section-label">APPRENDRE PAR THÈME</span>
+                <h2>Explorez les catégories</h2>
+                <p>Choisissez un domaine et commencez votre apprentissage.</p>
+            </div>
+
+            <a href="{{ path('app_category') }}" class="section-link">
+                Toutes les catégories <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+
+        <div class="row g-4">
+
+            {% for category in categories %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="category-card">
+                        <div class="category-icon">
+                            <i class="bi bi-folder2-open"></i>
+                        </div>
+
+                        <h3>{{ category.name }}</h3>
+
+                        <p>
+                            {{ category.description|striptags|slice(0, 110) }}
+                            {% if category.description|length > 110 %}...{% endif %}
+                        </p>
+
+                        <a href="{{ path('app_category') }}" class="category-link">
+                            Découvrir <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-12">
+                    <div class="empty-state">
+                        <i class="bi bi-folder2"></i>
+                        <p>Aucune catégorie disponible pour le moment.</p>
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+    </section>
+
+    {# Tutorials section #}
+    <section class="home-section">
+
+        <div class="section-heading">
+            <div>
+                <span class="section-label">CONTENU RÉCENT</span>
+                <h2>Derniers tutoriels</h2>
+                <p>Découvrez les dernières publications de notre communauté.</p>
+            </div>
+
+            <a href="{{ path('app_tutorial_index') }}" class="section-link">
+                Tous les tutoriels <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+
+        <div class="row g-4">
+
+            {% for tutorial in tutorials %}
+                <div class="col-md-6 col-lg-4">
+                    <article class="tutorial-card">
+
+                        <div class="tutorial-card-top">
+                            <span class="tutorial-category">
+                                {{ tutorial.category.name }}
+                            </span>
+
+                            <i class="bi bi-bookmark"></i>
+                        </div>
+
+                        <h3>{{ tutorial.title }}</h3>
+
+                        <p class="tutorial-description">
+                            {{ tutorial.content|striptags|slice(0, 130) }}
+                            {% if tutorial.content|length > 130 %}...{% endif %}
+                        </p>
+
+                        <div class="tutorial-meta">
+                            <span>
+                                <i class="bi bi-person-circle"></i>
+                                {{ tutorial.auteur.pseudonyme }}
+                            </span>
+
+                            <span>
+                                <i class="bi bi-calendar3"></i>
+                                {{ tutorial.createdAt|date('d/m/Y') }}
+                            </span>
+                        </div>
+
+                        <a href="{{ path('app_tutorial_show', {id: tutorial.id}) }}"
+                           class="tutorial-button">
+                            Lire le tutoriel <i class="bi bi-arrow-right"></i>
+                        </a>
+
+                    </article>
+                </div>
+            {% else %}
+                <div class="col-12">
+                    <div class="empty-state">
+                        <i class="bi bi-journal-text"></i>
+                        <p>Aucun tutoriel disponible pour le moment.</p>
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+    </section>
+
+    {# Call to action #}
+    <section class="cta-section">
+        <h2>Prêt à développer vos compétences ?</h2>
+        <p>Rejoignez DevDocs et apprenez quelque chose de nouveau chaque jour.</p>
+
+        {% if app.user %}
+            <a href="{{ path('app_tutorial_new') }}" class="btn btn-light btn-lg">
+                Publier un tutoriel <i class="bi bi-arrow-right"></i>
+            </a>
+        {% else %}
+            <a href="{{ path('app_register') }}" class="btn btn-light btn-lg">
+                Créer un compte <i class="bi bi-arrow-right"></i>
+            </a>
+        {% endif %}
+    </section>
+
 {% endblock %}

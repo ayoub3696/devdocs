@@ -13,18 +13,40 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use App\Security\Voter\TutorialVoter;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use App\Repository\CategoryRepository;
+
 
 
 #[Route('/tutorial')]
 class TutorialController extends AbstractController
 {
     #[Route('/', name: 'app_tutorial_index', methods: ['GET'])]
-    public function index(TutorialRepository $tutorialRepository): Response
-    {
-        return $this->render('tutorial/index.html.twig', [
-            'tutorials' => $tutorialRepository->findAll(),
-        ]);
+public function index(
+    Request $request,
+    TutorialRepository $tutorialRepository,
+    CategoryRepository $categoryRepository
+): Response {
+    $search = trim($request->query->get('q', ''));
+
+    $categoryId = $request->query->get('category');
+    $selectedCategory = null;
+
+    if ($categoryId !== null && ctype_digit($categoryId)) {
+        $selectedCategory = $categoryRepository->find((int) $categoryId);
     }
+
+    $tutorials = $tutorialRepository->findByFilters(
+        $search,
+        $selectedCategory
+    );
+
+    return $this->render('tutorial/index.html.twig', [
+        'tutorials' => $tutorials,
+        'categories' => $categoryRepository->findBy([], ['name' => 'ASC']),
+        'search' => $search,
+        'selectedCategory' => $selectedCategory,
+    ]);
+}
 
     #[Route('/{id}', name: 'app_tutorial_show', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function show(Tutorial $tutorial): Response

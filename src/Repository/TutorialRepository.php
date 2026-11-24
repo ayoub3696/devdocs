@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Category;
 use App\Entity\Tutorial;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -16,28 +17,27 @@ class TutorialRepository extends ServiceEntityRepository
         parent::__construct($registry, Tutorial::class);
     }
 
-//    /**
-//     * @return Tutorial[] Returns an array of Tutorial objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('t')
-//            ->andWhere('t.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('t.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findByFilters(?string $search, ?Category $category): array
+    {
+        $queryBuilder = $this->createQueryBuilder('t')
+            ->leftJoin('t.category', 'c')
+            ->addSelect('c')
+            ->leftJoin('t.auteur', 'a')
+            ->addSelect('a')
+            ->orderBy('t.createdAt', 'DESC');
 
-//    public function findOneBySomeField($value): ?Tutorial
-//    {
-//        return $this->createQueryBuilder('t')
-//            ->andWhere('t.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        if ($search !== null && $search !== '') {
+            $queryBuilder
+                ->andWhere('LOWER(t.title) LIKE :search OR LOWER(t.content) LIKE :search')
+                ->setParameter('search', '%' . mb_strtolower($search) . '%');
+        }
+
+        if ($category !== null) {
+            $queryBuilder
+                ->andWhere('t.category = :category')
+                ->setParameter('category', $category);
+        }
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

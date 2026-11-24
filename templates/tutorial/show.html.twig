@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ tutorial.title }} - DevDocs{% endblock %}
+
+{% block body %}
+
+<section class="tutorial-details-page">
+
+    <a href="{{ path('app_tutorial_index') }}" class="back-link">
+        <i class="bi bi-arrow-left"></i> Retour aux tutoriels
+    </a>
+
+    <article class="tutorial-details-card">
+
+        <div class="tutorial-details-header">
+            <span class="tutorial-category">
+                {{ tutorial.category ? tutorial.category.name : 'Général' }}
+            </span>
+
+            <div class="tutorial-details-actions">
+                {% if is_granted('POST_EDIT', tutorial) %}
+                    <a href="{{ path('app_tutorial_edit', {'id': tutorial.id}) }}"
+                       class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-pencil"></i> Modifier
+                    </a>
+                {% endif %}
+
+                {% if is_granted('DELETE', tutorial) %}
+                    <form method="post"
+                          action="{{ path('app_tutorial_delete', {'id': tutorial.id}) }}"
+                          onsubmit="return confirm('Voulez-vous vraiment supprimer ce tutoriel ?');">
+                        <input type="hidden" name="_token"
+                               value="{{ csrf_token('delete' ~ tutorial.id) }}">
+
+                        <button class="btn btn-outline-danger btn-sm">
+                            <i class="bi bi-trash"></i> Supprimer
+                        </button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+
+        <h1 class="tutorial-details-title">{{ tutorial.title }}</h1>
+
+        <div class="tutorial-details-meta">
+            <span>
+                <i class="bi bi-person-circle"></i>
+                {{ tutorial.auteur ? tutorial.auteur.pseudonyme : 'Anonyme' }}
+            </span>
+
+            <span>
+                <i class="bi bi-calendar3"></i>
+                {{ tutorial.createdAt|date('d/m/Y') }}
+            </span>
+
+            <span>
+                <i class="bi bi-folder2"></i>
+                {{ tutorial.category ? tutorial.category.name : 'Général' }}
+            </span>
+        </div>
+
+        {% if tutorial.tags|length > 0 %}
+            <div class="tutorial-details-tags">
+                {% for tag in tutorial.tags %}
+                    <span>{{ tag.name }}</span>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <hr>
+
+        <div class="tutorial-full-content">
+            {{ tutorial.content|nl2br }}
+        </div>
+
+    </article>
+
+    <div class="tutorial-details-bottom">
+        <a href="{{ path('app_tutorial_index') }}" class="btn btn-primary-custom">
+            <i class="bi bi-arrow-left"></i> Retour aux tutoriels
+        </a>
+    </div>
+
+</section>
+
+{% endblock %}

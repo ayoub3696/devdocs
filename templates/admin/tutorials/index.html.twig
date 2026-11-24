@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des tutoriels - DevDocs{% endblock %}
+
+{% block body %}
+
+<section class="admin-page">
+
+    <div class="admin-header">
+        <div>
+            <span class="admin-label">ADMINISTRATION</span>
+            <h1>Gestion des tutoriels</h1>
+            <p>Consultez et modérez les tutoriels publiés sur DevDocs.</p>
+        </div>
+
+        <a href="{{ path('app_admin') }}" class="btn btn-light">
+            <i class="bi bi-arrow-left"></i> Dashboard
+        </a>
+    </div>
+
+    <div class="admin-table-card">
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Titre</th>
+                        <th>Auteur</th>
+                        <th>Catégorie</th>
+                        <th>Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for tutorial in tutorials %}
+                        <tr>
+                            <td>{{ tutorial.title }}</td>
+                            <td>{{ tutorial.auteur ? tutorial.auteur.pseudonyme : 'Anonyme' }}</td>
+                            <td>{{ tutorial.category ? tutorial.category.name : 'Général' }}</td>
+                            <td>{{ tutorial.createdAt|date('d/m/Y') }}</td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <a href="{{ path('app_tutorial_show', {id: tutorial.id}) }}"
+                                       class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+
+                                    <form method="post"
+                                          action="{{ path('app_admin_tutorial_delete', {id: tutorial.id}) }}"
+                                          onsubmit="return confirm('Supprimer ce tutoriel ?');">
+
+                                        <input type="hidden" name="_token"
+                                               value="{{ csrf_token('admin_delete' ~ tutorial.id) }}">
+
+                                        <button class="btn btn-sm btn-outline-danger">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="5" class="text-center">
+                                Aucun tutoriel disponible.
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</section>
+
+{% endblock %}

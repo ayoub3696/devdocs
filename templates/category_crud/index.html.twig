@@ -1,37 +1,98 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Category index{% endblock %}
+{% block title %}Gestion des catégories - DevDocs{% endblock %}
 
 {% block body %}
-    <h1>Category index</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for category in categories %}
-            <tr>
-                <td>{{ category.id }}</td>
-                <td>{{ category.name }}</td>
-                <td>{{ category.description }}</td>
-                <td>
-                    <a href="{{ path('app_category_crud_show', {'id': category.id}) }}">show</a>
-                    <a href="{{ path('app_category_crud_edit', {'id': category.id}) }}">edit</a>
-                </td>
-            </tr>
+<section class="admin-category-page">
+
+    <div class="admin-category-header">
+        <div>
+            <span class="section-badge">ADMINISTRATION</span>
+            <h1>Gestion des catégories</h1>
+            <p>Organisez et gérez les catégories de la plateforme DevDocs.</p>
+        </div>
+
+        <a href="{{ path('app_category_crud_new') }}" class="btn btn-primary-custom">
+            <i class="bi bi-plus-lg"></i> Nouvelle catégorie
+        </a>
+    </div>
+
+    <div class="admin-category-card">
+
+        <div class="admin-category-card-header">
+            <h2>Liste des catégories</h2>
+            <span>{{ categories|length }} catégorie(s)</span>
+        </div>
+
+        {% if categories is not empty %}
+
+            <div class="table-responsive">
+                <table class="table admin-category-table">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Description</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for category in categories %}
+                            <tr>
+                                <td>
+                                    <div class="admin-category-name">
+                                        <i class="bi bi-folder2-open"></i>
+                                        {{ category.name }}
+                                    </div>
+                                </td>
+
+                                <td>
+                                    {{ category.description|default('Aucune description')|slice(0, 100) }}
+                                </td>
+
+                                <td>
+                                    <div class="admin-category-actions">
+                                        <a href="{{ path('app_category_crud_show', {'id': category.id}) }}"
+                                           class="btn btn-sm btn-light"
+                                           title="Voir">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+
+                                        <a href="{{ path('app_category_crud_edit', {'id': category.id}) }}"
+                                           class="btn btn-sm btn-light"
+                                           title="Modifier">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+
+                                        {{ include('category_crud/_delete_form.html.twig') }}
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
         {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
 
-    <a href="{{ path('app_category_crud_new') }}">Create new</a>
+            <div class="tutorial-empty">
+                <i class="bi bi-folder-x"></i>
+                <h3>Aucune catégorie</h3>
+                <p>Commencez par créer votre première catégorie.</p>
+                <a href="{{ path('app_category_crud_new') }}" class="btn btn-primary-custom">
+                    Créer une catégorie
+                </a>
+            </div>
+
+        {% endif %}
+
+    </div>
+
+    <a href="{{ path('app_category') }}" class="back-link mt-4">
+        <i class="bi bi-arrow-left"></i> Retour aux catégories publiques
+    </a>
+
+</section>
+
 {% endblock %}

@@ -1,4 +1,34 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+
+    <div class="form-field">
+        {{ form_label(form.content, 'Votre commentaire') }}
+        {{ form_widget(form.content, {
+            attr: {
+                class: 'form-control',
+                rows: 6,
+                placeholder: 'Écrivez votre commentaire ici...'
+            }
+        }) }}
+        {{ form_errors(form.content) }}
+    </div>
+
+    <div class="form-field">
+        {{ form_label(form.tutorial, 'Tutoriel concerné') }}
+        {{ form_widget(form.tutorial, {
+            attr: {class: 'form-select'}
+        }) }}
+        {{ form_errors(form.tutorial) }}
+    </div>
+
+    <div class="tutorial-form-actions">
+        <a href="{{ path('app_comment_index') }}" class="btn btn-light">
+            Annuler
+        </a>
+
+        <button type="submit" class="btn btn-primary-custom">
+            <i class="bi bi-check-lg"></i>
+            {{ button_label|default('Enregistrer') }}
+        </button>
+    </div>
+
 {{ form_end(form) }}

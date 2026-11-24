@@ -1,4 +1,37 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+
+    <div class="form-field">
+        {{ form_label(form.name, 'Nom de la catégorie') }}
+        {{ form_widget(form.name, {
+            attr: {
+                class: 'form-control',
+                placeholder: 'Exemple : Développement Web'
+            }
+        }) }}
+        {{ form_errors(form.name) }}
+    </div>
+
+    <div class="form-field">
+        {{ form_label(form.description, 'Description') }}
+        {{ form_widget(form.description, {
+            attr: {
+                class: 'form-control',
+                rows: 5,
+                placeholder: 'Décrivez cette catégorie...'
+            }
+        }) }}
+        {{ form_errors(form.description) }}
+    </div>
+
+    <div class="tutorial-form-actions">
+        <a href="{{ path('app_category_crud_index') }}" class="btn btn-light">
+            Annuler
+        </a>
+
+        <button type="submit" class="btn btn-primary-custom">
+            <i class="bi bi-check-lg"></i>
+            {{ button_label|default('Enregistrer') }}
+        </button>
+    </div>
+
 {{ form_end(form) }}
