@@ -1,13 +1,27 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Comment{% endblock %}
+{% block title %}Modifier un commentaire - DevDocs{% endblock %}
 
 {% block body %}
-    <h1>Edit Comment</h1>
+<section class="tutorial-form-page">
 
-    {{ include('comment/_form.html.twig', {'button_label': 'Update'}) }}
+    <a href="{{ path('app_comment_index') }}" class="back-link">
+        <i class="bi bi-arrow-left"></i> Retour aux commentaires
+    </a>
 
-    <a href="{{ path('app_comment_index') }}">back to list</a>
+    <div class="tutorial-form-card">
+        <div class="tutorial-form-heading">
+            <div class="form-icon">
+                <i class="bi bi-pencil-square"></i>
+            </div>
+            <h1>Modifier le commentaire</h1>
+            <p>Modifiez votre commentaire.</p>
+        </div>
 
-    {{ include('comment/_delete_form.html.twig') }}
+        {{ include('comment/_form.html.twig', {
+            button_label: 'Enregistrer les modifications'
+        }) }}
+    </div>
+
+</section>
 {% endblock %}

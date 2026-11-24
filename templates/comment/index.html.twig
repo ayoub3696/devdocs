@@ -1,37 +1,72 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Comment index{% endblock %}
+{% block title %}Commentaires - DevDocs{% endblock %}
 
 {% block body %}
-    <h1>Comment index</h1>
+<section class="admin-category-page">
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Content</th>
-                <th>CreatedAt</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for comment in comments %}
-            <tr>
-                <td>{{ comment.id }}</td>
-                <td>{{ comment.content }}</td>
-                <td>{{ comment.createdAt ? comment.createdAt|date('Y-m-d') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_comment_show', {'id': comment.id}) }}">show</a>
-                    <a href="{{ path('app_comment_edit', {'id': comment.id}) }}">edit</a>
-                </td>
-            </tr>
+    <div class="admin-category-header">
+        <div>
+            <span class="section-badge">COMMUNAUTÉ</span>
+            <h1>Les commentaires</h1>
+            <p>Découvrez les échanges et les discussions de la communauté.</p>
+        </div>
+
+        <a href="{{ path('app_comment_new') }}" class="btn btn-primary-custom">
+            <i class="bi bi-plus-lg"></i> Ajouter un commentaire
+        </a>
+    </div>
+
+    <div class="admin-category-card">
+
+        {% if comments is not empty %}
+            <div class="table-responsive">
+                <table class="table admin-category-table align-middle">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Commentaire</th>
+                            <th>Auteur</th>
+                            <th>Tutoriel</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for comment in comments %}
+                            <tr>
+                                <td>#{{ comment.id }}</td>
+                                <td>{{ comment.content|default('')|slice(0, 80) }}</td>
+                                <td>{{ comment.auteur ? comment.auteur.pseudonyme : 'Anonyme' }}</td>
+                                <td>{{ comment.tutorial ? comment.tutorial.title : 'Aucun' }}</td>
+                                <td>{{ comment.createdAt ? comment.createdAt|date('d/m/Y') : '-' }}</td>
+                                <td>
+                                    <div class="d-flex gap-2">
+                                        <a href="{{ path('app_comment_show', {'id': comment.id}) }}"
+                                           class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+
+                                        <a href="{{ path('app_comment_edit', {'id': comment.id}) }}"
+                                           class="btn btn-sm btn-outline-secondary">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            <div class="tutorial-empty">
+                <i class="bi bi-chat-square-text"></i>
+                <h3>Aucun commentaire</h3>
+                <p>Les commentaires apparaîtront ici.</p>
+            </div>
+        {% endif %}
 
-    <a href="{{ path('app_comment_new') }}">Create new</a>
+    </div>
+</section>
 {% endblock %}

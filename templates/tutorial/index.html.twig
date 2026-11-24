@@ -1,20 +1,148 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello TutorialController!{% endblock %}
+{% block title %}Tutoriels - DevDocs{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Liste des tutoriels</h1>
+<section class="tutorial-page">
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>/home/ayoub/projets/devdocs/src/Controller/TutorialController.php</code></li>
-        <li>Your template at <code>/home/ayoub/projets/devdocs/templates/tutorial/index.html.twig</code></li>
-    </ul>
-</div>
+    <div class="tutorial-header">
+        <div>
+            <span class="section-badge">APPRENTISSAGE</span>
+            <h1>Explorez nos tutoriels</h1>
+            <p>Découvrez de nouvelles technologies et développez vos compétences grâce à notre communauté.</p>
+        </div>
+
+        {% if app.user %}
+            <a href="{{ path('app_tutorial_new') }}" class="btn btn-primary-custom">
+                <i class="bi bi-plus-lg"></i> Publier un tutoriel
+            </a>
+        {% endif %}
+    </div>
+
+    {# Barre de recherche #}
+    <div class="tutorial-search-box">
+        <form method="GET" action="{{ path('app_tutorial_index') }}" class="tutorial-search-form">
+
+            <div class="search-input">
+                <i class="bi bi-search"></i>
+                <input
+                    type="text"
+                    name="q"
+                    value="{{ search }}"
+                    placeholder="Que souhaitez-vous apprendre ?"
+                >
+            </div>
+
+            <div class="search-filter">
+                <i class="bi bi-grid"></i>
+                <select name="category">
+                    <option value="">Toutes les catégories</option>
+
+                    {% for category in categories %}
+                        <option
+                            value="{{ category.id }}"
+                            {% if selectedCategory and selectedCategory.id == category.id %}selected{% endif %}
+                        >
+                            {{ category.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit" class="search-button">
+                <i class="bi bi-search"></i>
+                Rechercher
+            </button>
+
+        </form>
+    </div>
+
+    {# Résultats #}
+    <div class="tutorial-results-header">
+        <div>
+            <h2>Nos tutoriels</h2>
+            <p>{{ tutorials|length }} tutoriel(s) trouvé(s)</p>
+        </div>
+    </div>
+
+    {% if tutorials is not empty %}
+
+        <div class="row g-4">
+
+            {% for tutorial in tutorials %}
+
+                <div class="col-md-6 col-lg-4">
+                    <article class="tutorial-card">
+
+                        <div class="tutorial-card-top">
+                            <span class="tutorial-category">
+                                {{ tutorial.category ? tutorial.category.name : 'Général' }}
+                            </span>
+
+                            <i class="bi bi-file-earmark-code"></i>
+                        </div>
+
+                        <div class="tutorial-card-content">
+
+                            <h3>{{ tutorial.title }}</h3>
+
+                            <p class="tutorial-excerpt">
+                                {{ tutorial.content|striptags|slice(0, 150) }}
+                                {% if tutorial.content|striptags|length > 150 %}...{% endif %}
+                            </p>
+
+                            {% if tutorial.tags|length > 0 %}
+                                <div class="tutorial-tags">
+                                    {% for tag in tutorial.tags|slice(0, 3) %}
+                                        <span>{{ tag.name }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+
+                            <div class="tutorial-card-footer">
+                                <div class="tutorial-author">
+                                    <i class="bi bi-person-circle"></i>
+                                    <span>
+                                        {{ tutorial.auteur ? tutorial.auteur.pseudonyme : 'Anonyme' }}
+                                    </span>
+                                </div>
+
+                                <small>
+                                    {{ tutorial.createdAt|date('d/m/Y') }}
+                                </small>
+                            </div>
+
+                            <a
+                                href="{{ path('app_tutorial_show', {'id': tutorial.id}) }}"
+                                class="tutorial-read-more"
+                            >
+                                Lire le tutoriel
+                                <i class="bi bi-arrow-right"></i>
+                            </a>
+
+                        </div>
+                    </article>
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <div class="tutorial-empty">
+            <i class="bi bi-search"></i>
+            <h3>Aucun tutoriel trouvé</h3>
+            <p>Essayez une autre recherche ou sélectionnez une autre catégorie.</p>
+
+            <a href="{{ path('app_tutorial_index') }}" class="btn btn-primary-custom">
+                Voir tous les tutoriels
+            </a>
+        </div>
+
+    {% endif %}
+
+</section>
+
 {% endblock %}

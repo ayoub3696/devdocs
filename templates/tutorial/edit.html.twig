@@ -1,12 +1,82 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Modifier le tutoriel - DevDocs{% endblock %}
+
 {% block body %}
-    <h1>Modifier le tutoriel</h1>
 
-    {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <button type="submit">Modifier</button>
-    {{ form_end(form) }}
+<section class="tutorial-form-page">
 
-    <a href="{{ path('app_tutorial_index') }}">Retour</a>
+    <a href="{{ path('app_tutorial_show', {'id': tutorial.id}) }}" class="back-link">
+        <i class="bi bi-arrow-left"></i> Retour au tutoriel
+    </a>
+
+    <div class="tutorial-form-card">
+
+        <div class="tutorial-form-heading">
+            <div class="form-icon">
+                <i class="bi bi-pencil-square"></i>
+            </div>
+
+            <h1>Modifier le tutoriel</h1>
+            <p>Améliorez votre contenu et partagez une version actualisée.</p>
+        </div>
+
+        {{ form_start(form) }}
+
+            <div class="form-field">
+                {{ form_label(form.title, 'Titre du tutoriel') }}
+                {{ form_widget(form.title, {
+                    attr: {
+                        class: 'form-control',
+                        placeholder: 'Titre du tutoriel'
+                    }
+                }) }}
+                {{ form_errors(form.title) }}
+            </div>
+
+            <div class="form-field">
+                {{ form_label(form.content, 'Contenu du tutoriel') }}
+                {{ form_widget(form.content, {
+                    attr: {
+                        class: 'form-control',
+                        rows: 12,
+                        placeholder: 'Contenu du tutoriel...'
+                    }
+                }) }}
+                {{ form_errors(form.content) }}
+            </div>
+
+            <div class="form-field">
+                {{ form_label(form.category, 'Catégorie') }}
+                {{ form_widget(form.category, {
+                    attr: { class: 'form-select' }
+                }) }}
+                {{ form_errors(form.category) }}
+            </div>
+
+            <div class="form-field">
+                {{ form_label(form.tags, 'Tags') }}
+                {{ form_widget(form.tags, {
+                    attr: { class: 'form-select' }
+                }) }}
+                {{ form_errors(form.tags) }}
+            </div>
+
+            <div class="tutorial-form-actions">
+                <a href="{{ path('app_tutorial_show', {'id': tutorial.id}) }}"
+                   class="btn btn-light">
+                    Annuler
+                </a>
+
+                <button type="submit" class="btn btn-primary-custom">
+                    <i class="bi bi-check-lg"></i> Enregistrer les modifications
+                </button>
+            </div>
+
+        {{ form_end(form) }}
+
+    </div>
+
+</section>
+
 {% endblock %}

@@ -3,56 +3,78 @@
 {% block title %}Inscription - DevDocs{% endblock %}
 
 {% block body %}
+<section class="tutorial-form-page">
 
-<div class="container mt-5" style="max-width: 500px;">
+    <div class="tutorial-form-card">
 
-    <h2 class="text-center mb-4">Créer un compte</h2>
+        <div class="tutorial-form-heading">
+            <div class="form-icon">
+                <i class="bi bi-person-plus"></i>
+            </div>
 
-    {{ form_start(registrationForm) }}
+            <h1>Rejoignez DevDocs</h1>
+            <p>Créez votre compte et commencez à apprendre.</p>
+        </div>
 
-        <div class="mb-3">
-            {{ form_label(registrationForm.pseudonyme) }}
-            {{ form_widget(registrationForm.pseudonyme, {
-                attr: {class: 'form-control'}
-            }) }}
-            <div class="text-danger">
+        {{ form_start(registrationForm) }}
+
+            <div class="form-field">
+                {{ form_label(registrationForm.pseudonyme, 'Nom d’utilisateur') }}
+                {{ form_widget(registrationForm.pseudonyme, {
+                    attr: {
+                        class: 'form-control',
+                        placeholder: 'Votre pseudonyme'
+                    }
+                }) }}
                 {{ form_errors(registrationForm.pseudonyme) }}
             </div>
-        </div>
 
-        <div class="mb-3">
-            {{ form_label(registrationForm.email) }}
-            {{ form_widget(registrationForm.email, {
-                attr: {class: 'form-control'}
-            }) }}
-            <div class="text-danger">
+            <div class="form-field">
+                {{ form_label(registrationForm.email, 'Adresse e-mail') }}
+                {{ form_widget(registrationForm.email, {
+                    attr: {
+                        class: 'form-control',
+                        placeholder: 'exemple@email.com'
+                    }
+                }) }}
                 {{ form_errors(registrationForm.email) }}
             </div>
-        </div>
 
-        <div class="mb-3">
-            {{ form_label(registrationForm.plainPassword.first) }}
-            {{ form_widget(registrationForm.plainPassword.first, {
-                attr: {class: 'form-control'}
-            }) }}
-            {{ form_errors(registrationForm.plainPassword.first) }}
-        </div>
+            <div class="form-field">
+                {{ form_label(registrationForm.plainPassword.first, 'Mot de passe') }}
+                {{ form_widget(registrationForm.plainPassword.first, {
+                    attr: {
+                        class: 'form-control',
+                        placeholder: 'Choisissez un mot de passe'
+                    }
+                }) }}
+                {{ form_errors(registrationForm.plainPassword.first) }}
+            </div>
 
-        <div class="mb-3">
-            {{ form_label(registrationForm.plainPassword.second) }}
-            {{ form_widget(registrationForm.plainPassword.second, {
-                attr: {class: 'form-control'}
-            }) }}
-            {{ form_errors(registrationForm.plainPassword.second) }}
-            {{ form_errors(registrationForm.plainPassword) }}
-        </div>
+            <div class="form-field">
+                {{ form_label(registrationForm.plainPassword.second, 'Confirmer le mot de passe') }}
+                {{ form_widget(registrationForm.plainPassword.second, {
+                    attr: {
+                        class: 'form-control',
+                        placeholder: 'Confirmez votre mot de passe'
+                    }
+                }) }}
+                {{ form_errors(registrationForm.plainPassword.second) }}
+            </div>
 
-        <button type="submit" class="btn btn-primary w-100">
-            S'inscrire
-        </button>
+            <button type="submit" class="btn btn-primary-custom w-100">
+                <i class="bi bi-person-check"></i>
+                Créer mon compte
+            </button>
 
-    {{ form_end(registrationForm) }}
+        {{ form_end(registrationForm) }}
 
-</div>
+        <p class="text-center mt-4">
+            Vous avez déjà un compte ?
+            <a href="{{ path('app_login') }}">Se connecter</a>
+        </p>
 
+    </div>
+
+</section>
 {% endblock %}
